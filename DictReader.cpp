@@ -2,7 +2,7 @@
 
 DictReader::DictReader(const std::string filePath, const char delimiter)
 {
-  // check if a csv file path is provied
+  // check if a CSV file path is provided
   std::regex re("^.+\\.csv$");
   if (!std::regex_match(filePath, re))
     throw std::invalid_argument("Invalid file path provided. provide a valid path to a CSV file.");
@@ -44,9 +44,8 @@ std::vector<std::string> DictReader::split(const std::string str, const char del
   {
     if (str[i] == delimiter || str[i + 1] == '\0')
     {
-      if (str[i + 1] == '\0')
-        token += str[i];
-
+      if (str[i + 1] == '\0') token += str[i];
+      
       tokens.push_back(token);
       token = "";
     }
