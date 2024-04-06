@@ -13,7 +13,7 @@ DictReader::DictReader(const std::string filePath, const char delimiter)
     throw std::runtime_error("Failed to open CSV file. ensure the file exists and you have appropriate permissions.");
 
   numbLines = 0;
-  std::string line;
+  std::string line{};
   while (std::getline(file, line))
   {
     if (numbLines == 0)
