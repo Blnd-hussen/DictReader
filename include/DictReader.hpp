@@ -1,11 +1,11 @@
 #pragma once
 
 #include <iostream>
-#include <vector>
 #include <map>
+#include <vector>
 
-class DictReader
-{
+
+class DictReader {
 private:
   size_t numbLines;
   std::vector<std::string> fieldNames;
