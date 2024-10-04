@@ -1,10 +1,11 @@
 #pragma once
 
-#include <iostream>
 #include <filesystem>
+#include <iostream>
 #include <map>
 #include <optional>
 #include <vector>
+
 
 class DictReader {
 private:
@@ -18,3 +19,5 @@ public:
   std::optional<std::vector<std::string>> getFieldNames();
   std::optional<std::vector<std::map<std::string, std::string>>> getRows();
 };
+
+std::vector<std::string> split(const std::string str, const char delimiter);
