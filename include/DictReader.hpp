@@ -1,6 +1,7 @@
 #pragma once
 
 #include <iostream>
+#include <filesystem>
 #include <map>
 #include <optional>
 #include <vector>
@@ -12,7 +13,7 @@ private:
   std::vector<std::map<std::string, std::string>> rows;
 
 public:
-  DictReader(const std::string, const char = ',');
+  DictReader(const std::filesystem::path filePath, const char delimiter = ',');
   std::optional<size_t> getNumbLines();
   std::optional<std::vector<std::string>> getFieldNames();
   std::optional<std::vector<std::map<std::string, std::string>>> getRows();

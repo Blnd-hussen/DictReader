@@ -2,18 +2,33 @@
 #include <fstream>
 #include <regex>
 
-DictReader::DictReader(const std::string filePath, const char delimiter) {
-  // check if a CSV file path is provided
-  std::regex re("^.+\\.csv$");
-  if (!std::regex_match(filePath, re))
-    throw std::invalid_argument(
-        "Invalid file path provided. provide a valid path to a CSV file.");
+namespace fs = std::filesystem;
 
-  // open the file for reading and check if it exists
+DictReader::DictReader(const fs::path filePath, const char delimiter) {
+
+  // * make sure a csv path is provided
+  if (filePath.empty() || filePath.extension() != ".csv") {
+    throw std::invalid_argument(
+      "Invalid file path provided. provide a valid path to a CSV file. " +
+      filePath.string()
+    );
+  }
+
+  // * check if the file exists and is a regular file
+  if (!fs::exists(filePath) || !fs::is_regular_file(filePath)) {
+    throw std::runtime_error(
+      "file does not exist or is not regular file: " + filePath.string()
+    );
+  }
+  
+  // * make sure that file has read permission
   std::ifstream file(filePath);
-  if (!file.is_open())
-    throw std::runtime_error("Failed to open CSV file. ensure the file exists "
-                             "and you have appropriate permissions.");
+  if (!file.is_open()) {
+    throw std::runtime_error(
+      "Failed to open CSV file: " + filePath.filename().string() + 
+      "\nensure that you have appropriate permissions."
+    );
+  }
 
   numbLines = 0;
   std::string line{};
