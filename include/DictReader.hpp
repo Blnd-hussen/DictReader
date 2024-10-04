@@ -2,8 +2,8 @@
 
 #include <iostream>
 #include <map>
+#include <optional>
 #include <vector>
-
 
 class DictReader {
 private:
@@ -11,11 +11,9 @@ private:
   std::vector<std::string> fieldNames;
   std::vector<std::map<std::string, std::string>> rows;
 
-  std::vector<std::string> split(const std::string, const char = ' ');
-
 public:
   DictReader(const std::string, const char = ',');
-  size_t getNumbLines();
-  std::vector<std::string> getFieldNames();
-  std::vector<std::map<std::string, std::string>> getRows();
+  std::optional<size_t> getNumbLines();
+  std::optional<std::vector<std::string>> getFieldNames();
+  std::optional<std::vector<std::map<std::string, std::string>>> getRows();
 };

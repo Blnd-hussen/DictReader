@@ -33,8 +33,7 @@ DictReader::DictReader(const std::string filePath, const char delimiter) {
   file.close();
 };
 
-std::vector<std::string> DictReader::split(const std::string str,
-                                           const char delimiter) {
+std::vector<std::string> split(const std::string str, const char delimiter) {
   std::vector<std::string> tokens;
   std::string token{};
 
@@ -53,10 +52,20 @@ std::vector<std::string> DictReader::split(const std::string str,
   return tokens;
 }
 
-std::vector<std::string> DictReader::getFieldNames() { return fieldNames; }
+auto DictReader::getFieldNames() -> std::optional<std::vector<std::string>> {
+  if (fieldNames.size() <= 0) {
+    return std::nullopt;
+  }
+  return fieldNames;
+}
 
-std::vector<std::map<std::string, std::string>> DictReader::getRows() {
+auto DictReader::getRows()
+    -> std::optional<std::vector<std::map<std::string, std::string>>> {
+
+  if (rows.size() <= 0) {
+    return std::nullopt;
+  }
   return rows;
 }
 
-size_t DictReader::getNumbLines() { return numbLines; }
+auto DictReader::getNumbLines() -> std::optional<size_t> { return numbLines; }
