@@ -9,25 +9,22 @@ DictReader::DictReader(const fs::path filePath, const char delimiter) {
   // * make sure a csv path is provided
   if (filePath.empty() || filePath.extension() != ".csv") {
     throw std::invalid_argument(
-      "Invalid file path provided. provide a valid path to a CSV file. " +
-      filePath.string()
-    );
+        "Invalid file path provided. provide a valid path to a CSV file. " +
+        filePath.string());
   }
 
   // * check if the file exists and is a regular file
   if (!fs::exists(filePath) || !fs::is_regular_file(filePath)) {
-    throw std::runtime_error(
-      "file does not exist or is not regular file: " + filePath.string()
-    );
+    throw std::runtime_error("file does not exist or is not regular file: " +
+                             filePath.string());
   }
-  
+
   // * make sure that file has read permission
   std::ifstream file(filePath);
   if (!file.is_open()) {
     throw std::runtime_error(
-      "Failed to open CSV file: " + filePath.filename().string() + 
-      "\nensure that you have appropriate permissions."
-    );
+        "Failed to open CSV file: " + filePath.filename().string() +
+        "\nensure that you have appropriate permissions.");
   }
 
   numbLines = 0;
@@ -48,7 +45,22 @@ DictReader::DictReader(const fs::path filePath, const char delimiter) {
   file.close();
 };
 
-std::vector<std::string> split(const std::string str, const char delimiter) {
+auto DictReader::getFieldNames() -> std::vector<std::string> {
+  return fieldNames;
+}
+
+auto DictReader::getRows() -> std::vector<std::map<std::string, std::string>> {
+  return rows;
+}
+
+auto DictReader::getNumbLines() -> size_t { return numbLines; }
+
+auto DictReader::hasFieldNames() -> bool { return fieldNames.size() > 0; }
+
+auto DictReader::hasRows() -> bool { return rows.size() > 0; }
+
+auto split(const std::string str, const char delimiter)
+    -> std::vector<std::string> {
   std::vector<std::string> tokens;
   std::string token{};
 
@@ -66,21 +78,3 @@ std::vector<std::string> split(const std::string str, const char delimiter) {
 
   return tokens;
 }
-
-auto DictReader::getFieldNames() -> std::optional<std::vector<std::string>> {
-  if (fieldNames.size() <= 0) {
-    return std::nullopt;
-  }
-  return fieldNames;
-}
-
-auto DictReader::getRows()
-    -> std::optional<std::vector<std::map<std::string, std::string>>> {
-
-  if (rows.size() <= 0) {
-    return std::nullopt;
-  }
-  return rows;
-}
-
-auto DictReader::getNumbLines() -> std::optional<size_t> { return numbLines; }

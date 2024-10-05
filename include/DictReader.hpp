@@ -3,9 +3,7 @@
 #include <filesystem>
 #include <iostream>
 #include <map>
-#include <optional>
 #include <vector>
-
 
 class DictReader {
 private:
@@ -15,9 +13,11 @@ private:
 
 public:
   DictReader(const std::filesystem::path filePath, const char delimiter = ',');
-  std::optional<size_t> getNumbLines();
-  std::optional<std::vector<std::string>> getFieldNames();
-  std::optional<std::vector<std::map<std::string, std::string>>> getRows();
+  bool hasFieldNames();
+  bool hasRows();
+  size_t getNumbLines();
+  std::vector<std::string> getFieldNames();
+  std::vector<std::map<std::string, std::string>> getRows();
 };
 
 std::vector<std::string> split(const std::string str, const char delimiter);
