@@ -37,15 +37,19 @@ DictReader::DictReader(const fs::path filePath, const char delimiter) {
       fieldNames = split(line, delimiter);
     } else {
       auto rowData = split(line, delimiter);
+
       std::map<std::string, std::string> row;
       for (size_t i = 0; i < fieldNames.size(); ++i) {
-        row[fieldNames[i]] = rowData[i];
+        if (i >= rowData.size()) {
+          row[fieldNames[i]] = "None";
+        } else {
+          row[fieldNames[i]] = rowData[i];
+        }
       }
       rows.push_back(row);
     }
     numbLines++;
   }
-  file.close();
 };
 
 auto DictReader::getFieldNames() -> std::vector<std::string> {
