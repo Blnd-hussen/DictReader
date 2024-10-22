@@ -1,6 +1,7 @@
 #include "../include/DictReader.hpp"
 #include <fstream>
 #include <regex>
+#include <sstream>
 
 namespace fs = std::filesystem;
 
@@ -59,9 +60,28 @@ auto DictReader::getRows() -> std::vector<std::map<std::string, std::string>> {
 
 auto DictReader::getNumbLines() -> size_t { return numbLines; }
 
-auto DictReader::hasFieldNames() -> bool { return fieldNames.size() > 0; }
+auto DictReader::hasFieldNames() -> bool { return !fieldNames.empty(); }
 
-auto DictReader::hasRows() -> bool { return rows.size() > 0; }
+auto DictReader::hasRows() -> bool { return !rows.empty(); }
+
+auto DictReader::toJsonString() -> std::string {
+  if (!hasFieldNames() || !hasRows()) {
+    return "{}";
+  }
+
+  std::stringstream stringBuilder;
+  for (const auto &row : rows) {
+    stringBuilder << "{";
+    for (size_t j = 0; j < fieldNames.size(); ++j) {
+      const auto currentField = fieldNames[j];
+      stringBuilder << "'" << currentField << "': '" << row.at(currentField)
+                    << (j + 1 == fieldNames.size() ? "'" : "', ");
+    }
+    stringBuilder << "}\n";
+  }
+
+  return stringBuilder.str();
+}
 
 auto split(const std::string str, const char delimiter)
     -> std::vector<std::string> {
