@@ -64,7 +64,7 @@ auto DictReader::hasFieldNames() -> bool { return !fieldNames.empty(); }
 
 auto DictReader::hasRows() -> bool { return !rows.empty(); }
 
-auto DictReader::toJsonString() -> std::string {
+auto DictReader::toString() -> std::string {
   if (!hasFieldNames() || !hasRows()) {
     return "{}";
   }
@@ -88,8 +88,9 @@ auto split(const std::string str, const char delimiter)
 
   std::vector<std::string> tokens;
   std::smatch matches;
-  std::regex re("\"([^\"]*)\"|([^,]+)");
-  
+  std::regex re(
+      std::string("\"([^\"]*)\"|([^" + std::string(1, delimiter) + "]+)"));
+
   std::string line = str;
   while (std::regex_search(line, matches, re)) {
     for (int i = 1; i < matches.size(); ++i) {
