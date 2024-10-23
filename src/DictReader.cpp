@@ -89,7 +89,8 @@ auto split(const std::string str, const char delimiter)
   std::vector<std::string> tokens;
   std::smatch matches;
   std::regex re(
-      std::string("\"([^\"]*)\"|([^" + std::string(1, delimiter) + "]+)"));
+    "\"((?:[^\"]|\"\")*)\"|([^" + std::string(1, delimiter) + "]+)"
+  );
 
   std::string line = str;
   while (std::regex_search(line, matches, re)) {
