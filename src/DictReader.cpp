@@ -64,21 +64,38 @@ auto DictReader::hasFieldNames() -> bool { return !fieldNames.empty(); }
 
 auto DictReader::hasRows() -> bool { return !rows.empty(); }
 
-auto DictReader::toString() -> std::string {
+auto DictReader::toJsonString() -> std::string {
   if (!hasFieldNames() || !hasRows()) {
     return "{}";
   }
 
   std::stringstream stringBuilder;
-  for (const auto &row : rows) {
-    stringBuilder << "{";
+  stringBuilder << "[\n";
+
+  for (size_t i = 0; i < rows.size(); ++i) {
+    const auto &row = rows[i];
+    stringBuilder << "  {\n";
+
     for (size_t j = 0; j < fieldNames.size(); ++j) {
-      const auto currentField = fieldNames[j];
-      stringBuilder << "'" << currentField << "': '" << row.at(currentField)
-                    << (j + 1 == fieldNames.size() ? "'" : "', ");
+      const auto &fieldName = fieldNames[j];
+      stringBuilder << "    \"" << fieldName << "\": \"" << row.at(fieldName)
+                    << "\"";
+
+      if (j + 1 < fieldNames.size()) {
+        stringBuilder << ",";
+      }
+      stringBuilder << "\n";
     }
-    stringBuilder << "}\n";
+
+    stringBuilder << "  }";
+
+    if (i + 1 < rows.size()) {
+      stringBuilder << ",";
+    }
+    stringBuilder << "\n";
   }
+
+  stringBuilder << "]\n";
 
   return stringBuilder.str();
 }
@@ -88,10 +105,9 @@ auto split(const std::string &str, const char &delimiter)
 
   std::vector<std::string> tokens;
   std::smatch matches;
-  
-  std::regex re(
-    "\"((?:[^\"]|\"\")*)\"|([^" + std::string(1, delimiter) + "]+)"
-  );
+
+  std::regex re("\"((?:[^\"]|\"\")*)\"|([^" + std::string(1, delimiter) +
+                "]+)");
 
   std::string line = str;
   while (std::regex_search(line, matches, re)) {

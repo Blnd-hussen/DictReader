@@ -15,7 +15,7 @@ public:
   DictReader(const std::filesystem::path filePath, const char delimiter = ',');
   bool hasFieldNames();
   bool hasRows();
-  std::string toString();
+  std::string toJsonString();
   size_t getNumbLines();
   std::vector<std::string> getFieldNames();
   std::vector<std::map<std::string, std::string>> getRows();
