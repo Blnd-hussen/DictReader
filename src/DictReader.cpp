@@ -83,11 +83,12 @@ auto DictReader::toString() -> std::string {
   return stringBuilder.str();
 }
 
-auto split(const std::string str, const char delimiter)
+auto split(const std::string &str, const char &delimiter)
     -> std::vector<std::string> {
 
   std::vector<std::string> tokens;
   std::smatch matches;
+  
   std::regex re(
     "\"((?:[^\"]|\"\")*)\"|([^" + std::string(1, delimiter) + "]+)"
   );
