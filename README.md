@@ -5,7 +5,15 @@ DictReader provides a simple and efficient way to read and process data from CSV
 ## Features
 
 - Extracts field names from the first line of the CSV file.
-- Parses each data row into a key-value map, where keys are field names and values are individual data elements.
+
+- Parses each data row into a key-value map (std::map), where keys are field names and values are individual data elements.
+
+- Supports custom field delimiters (e.g., ,, ;, |, etc.).
+
+- Handles quoted fields that contain delimiters inside them.
+
+- Converts CSV data into a JSON-like string format for easy inspection.
+
 - Counts the total number of lines in the CSV file.
 
 ## Usage
@@ -16,7 +24,7 @@ DictReader provides a simple and efficient way to read and process data from CSV
 ### Example usage
 
 ```c++
-#include "DictReader.h"
+#include "DictReader.hpp"
 
 int main(int argc, char **argv) {
   try {
@@ -31,6 +39,10 @@ int main(int argc, char **argv) {
     // Get total number of lines
     size_t numLines = reader.getNumbLines();
 
+    // Convert parsed data to JSON-like string format
+    std::string jsonString = reader.toJsonString();
+    std::cout << jsonString << std::endl;
+
     // Process data as needed
     // ...
 
@@ -43,10 +55,46 @@ int main(int argc, char **argv) {
 }
 ```
 
+### Output Example
+
+For a csv file like
+
+```csv
+Name,Age,Location
+John Doe,29,"New York, USA"
+Jane Smith,31,London
+```
+
+The JSON-like output would be
+
+```json
+[
+  {
+    "Name": "John Doe",
+    "Age": "29",
+    "Location": "New York, USA"
+  },
+  {
+    "Name": "Jane Smith",
+    "Age": "31",
+    "Location": "London"
+  }
+]
+```
+
 ## Error Handling
 
-DictReader throws exceptions for invalid file paths and file access errors. Make sure to catch these exceptions using try-catch blocks in your code.
+DictReader throws exceptions for the following cases:
+
+- Invalid or missing file paths.
+- Non-CSV file formats.
+- Issues with file access (e.g., permissions).
+
+Make sure to catch these exceptions using try-catch blocks in your code to handle errors gracefully.
 
 ## Dependencies
 
-This library requires a C++ compiler with support for C++11 features (e.g., regular expressions, std::map, std::vector).
+DictReader requires the following:
+
+- C++17 or higher (for std::filesystem, std::regex, std::map, std::vector).
+- Standard C++ library features such as std::ifstream for file reading.
